@@ -100,4 +100,22 @@ return array(
             ),
         ),
     ),
+    'doctrine' => array(
+        'driver' => array(
+            'Application_driver' => array(
+                'class' => 'Doctrine\ORM\Mapping\Driver\AnnotationDriver',
+                'cache' => 'array',
+            ),
+            'orm_default' => array(
+                'drivers' => array(
+                    'Domain\Entity' => 'Application_driver'
+                ),
+            )
+        ),
+        'configuration'=>array(
+            'orm_default'=>array(
+                'generate_proxies'=>false,
+            )
+        )
+    )
 );

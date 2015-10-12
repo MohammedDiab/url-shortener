@@ -49,6 +49,13 @@ return array(
             'Shortener\Controller\Index' => 'Shortener\Controller\IndexController'
         ),
     ),
+    'service_manager' => array(
+        'factories' => array(
+            'UrlService' => function (\Zend\ServiceManager\ServiceLocatorInterface $sm) {
+                return new \Shortener\Service\UrlService($sm->get('doctrine.entitymanager.orm_default'));
+            },
+        )
+    ),
     'view_manager' => array(
         'template_path_stack' => array(
             __DIR__ . '/../view',
