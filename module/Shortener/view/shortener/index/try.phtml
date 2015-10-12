@@ -1,0 +1,34 @@
+<div class="vspace"></div>
+<?php
+$form = $this->form;
+?>
+    <div class="row">
+        <form class="col s12 m6 offset-m3" action="/short" method="post" autocomplete="off">
+            <div class="row">
+                <div class="card waves-effect waves-block">
+                    <div class="card-title  black-text">
+                        <div class="center">Submit Your URL</div>
+                    </div>
+                    <div class="card-content">
+                        <div class="row">
+                            <div class="input-field s12">
+                                <i class="material-icons prefix">language</i>
+                                <input id="url" type="url" class="validate" required >
+                                <label for="url" class="label" data-error="Invalid! , example: http://www.google.com" data-success="Correct!">Your url</label>
+                            </div>
+                            <div class="input-field s12"></div>
+                        </div>
+                        <div class="row">
+                                <?=$this->customCaptchaViewHelper($form->get('captcha'));?>
+                        </div>
+                    </div>
+                    <div class="card-action">
+                        <div class="right-align">
+                            <button id="ember486" class="ember-view waves-light waves-effect btn" type="submit">  <i class="mdi-hardware-keyboard-arrow-right right"></i>
+                                Shorten URL
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>

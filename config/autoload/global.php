@@ -12,5 +12,12 @@
  */
 
 return array(
-    // ...
+    //captcha settings
+    'captcha' => array(
+        'font' =>'public/font/roboto/Roboto-Light.ttf',
+        'imgTmpPath' => 'data/captchaTmpImages',
+        'width' => 200,
+        'height' => 50,
+        'captchaGeneratorRouteName'=>'captcha'
+    ),
 );

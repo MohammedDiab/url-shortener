@@ -59,6 +59,7 @@ return array(
         ),
         'factories' => array(
             'translator' => 'Zend\Mvc\Service\TranslatorServiceFactory',
+            'CaptchaService' => 'Shortener\Service\CaptchaFactory',
         ),
     ),
     'translator' => array(
