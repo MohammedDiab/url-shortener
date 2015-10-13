@@ -22,8 +22,15 @@ use Zend\View\Model\ViewModel;
 class IndexController extends AbstractActionController
 {
 
+    /**
+     * @var Request
+     */
     protected $request;
     protected $captchaService;
+
+    /**
+     * @var URLShortenerForm
+     */
     protected $form ;
     /**
      * @var UrlService
@@ -47,22 +54,28 @@ class IndexController extends AbstractActionController
 
     public function shortAction (){
 
+        $baseEncodedId  = null;
+        $shortUrl = null;
+        $error = null;
         if ($this->request->isPost()) {
             $this->form->setData($this->request->getPost());
+            // check if the captcha is valid
             if (true) {
-
-                $url = new Url();
-                    $url->url="http://www.google.com";
-                    $url->createdDate= new \DateTime();
-                var_dump("http://www.lesschr.com/".$this->urlService->createShortUrl($url));die();
-                //echo "captcha is valid ";
-
+                $url = $this->params()->fromPost('url');
+                $urlEntity = new Url();
+                    $urlEntity->url=$url;
+                    $urlEntity->createdDate= new \DateTime();
+                $baseEncodedId = $this->urlService->createShortUrl($urlEntity) ;
             }else {
-                echo "captcha is invalid ";
+                $error = "Captcha is invalid";
             }
         }
+        if ($baseEncodedId!=null){
+            $shortUrl= "lesschr.com/".$baseEncodedId;
+        }
 
-        return new ViewModel(array("url"=>"alooo"));
+        return new ViewModel(array("url"=>$shortUrl,"error"=>$error));
+
 
     }
 

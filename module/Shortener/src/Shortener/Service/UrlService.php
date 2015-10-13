@@ -26,6 +26,7 @@ class UrlService extends AbstractService{
                 return base64_encode($url->id);
             }
         } catch (\Exception $e){
+            var_dump($e->getMessage());
             return null;
         }
         return null;

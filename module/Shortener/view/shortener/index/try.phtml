@@ -3,7 +3,7 @@
 $form = $this->form;
 ?>
     <div class="row">
-        <form class="col s12 m6 offset-m3" action="/short" method="post" autocomplete="off">
+        <form class="col s12 m6 offset-m3" action="/short" method="POST" autocomplete="off">
             <div class="row">
                 <div class="card waves-effect waves-block">
                     <div class="card-title  black-text">
@@ -13,7 +13,7 @@ $form = $this->form;
                         <div class="row">
                             <div class="input-field s12">
                                 <i class="material-icons prefix">language</i>
-                                <input id="url" type="url" class="validate" required >
+                                <input id="url" name="url" type="url" class="validate" required >
                                 <label for="url" class="label" data-error="Invalid! , example: http://www.google.com" data-success="Correct!">Your url</label>
                             </div>
                             <div class="input-field s12"></div>
