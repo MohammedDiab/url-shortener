@@ -1,5 +1,7 @@
 # url-shortener
-project to shorten the url and log the hits on each url 
+project to shorten the url and log the hits on each url
+the project is built with php , zend framework , doctrine 2 
+the app is responsive also
 
 # Install
 1.you have to install composer first 
@@ -14,8 +16,8 @@ then you are good to go !
 screenshots : 
 
 1. Tracking Diagram (it has two clicks only for one month) 
-2. <img scr="http://i.imgur.com/r7tyP5P.png"/>
+<img src="http://i.imgur.com/r7tyP5P.png"/>
 3. Shortener Form 
-4. <img scr="http://i.imgur.com/ghanm43.png"/>
+<img src="http://i.imgur.com/ghanm43.png"/>
 
 
