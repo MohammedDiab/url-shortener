@@ -9,11 +9,14 @@
 
 namespace Shortener\Controller;
 
+use Domain\Entity\Log;
 use Domain\Entity\Url;
 use Shortener\Form\FormCaptcha;
+use Shortener\Form\TrackForm;
 use Shortener\Form\URLShortenerForm;
 use Shortener\Form\URLShortenerFormCaptcha;
 use Shortener\Service\UrlService;
+use Zend\Http\Headers;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\Stdlib\RequestInterface as Request;
 use Zend\Stdlib\ResponseInterface as Response;
@@ -60,7 +63,7 @@ class IndexController extends AbstractActionController
         if ($this->request->isPost()) {
             $this->form->setData($this->request->getPost());
             // check if the captcha is valid
-            if (true) {
+            if ($this->form->isValid()) {
                 $url = $this->params()->fromPost('url');
                 $urlEntity = new Url();
                     $urlEntity->url=$url;
@@ -100,5 +103,99 @@ class IndexController extends AbstractActionController
         }
 
         return $response;
+    }
+
+    public function redirectAction () {
+        $baseEncoded = $this->params("baseEncodedUrl");
+        $id = base64_decode($baseEncoded);
+        $urlEntity= $this->urlService->getUrlById($id);
+
+        if ($urlEntity!=null){
+            // log visit
+            $logEntity = new Log();
+                $logEntity->urlId= $id;
+                $logEntity->visitDate = new \DateTime();
+            $this->urlService->logVisit($logEntity);
+
+            $headers = new Headers();
+            $headers->addHeaderLine("Location",$urlEntity->url);
+            $response = new \Zend\Http\Response();
+            $response->setContent("Redirecting you to : {$urlEntity->url}");
+            $response->setStatusCode(301);
+            $response->setHeaders($headers);
+        }else {
+            $response = new \Zend\Http\Response();
+            $response->setContent("Invalid Link : {$urlEntity->url}");
+            $response->setStatusCode(500);
+        }
+        return $response;
+
+    }
+
+    public function trackAction () {
+        $trackForm = new TrackForm($this->captchaService);
+        return array('form' => $trackForm);
+    }
+
+    private function convertResultsArrayToJson ($results){
+
+        $jsString = array();
+
+        foreach ($results as $date => $count){
+            $date = \DateTime::createFromFormat("Y-m-d", $date);
+            $year = $date->format("Y");
+            $month = $date->format("m")-1;
+            $day = $date->format("d");
+            $jsString[] = "{ x: new Date($year, $month, $day), y: $count} ";
+        };
+
+        return implode("," , $jsString);
+        //{ x: new Date(2012, 00, 1), y: 450 },
+
+    }
+
+    public function trackGraphAction () {
+
+
+        $error = null;
+        $data = null;
+        $jsString="";
+        $trackForm = new TrackForm($this->captchaService);
+        if ($this->request->isPost()) {
+            $trackForm->setData($this->request->getPost());
+            // check if the captcha is valid
+            if ($trackForm->isValid()) {
+                $url = $this->params()->fromPost('url');
+                $id = $this->validateLesschrUrl($url);
+                if ($id>0 ){
+                    $results = $this->urlService->getReportData($id);
+                    if (count($results)>0){
+                        $jsString = $this->convertResultsArrayToJson($results);
+                    }
+                }else {
+                    $error= "URL is invalid please use the following format http://lesschr.com/MQ==";
+                }
+            }else {
+                $error = "Captcha is invalid";
+            }
+        }else {
+            $error="Invalid Request !";
+        }
+        return new ViewModel(array("data"=>$jsString,"error"=>$error));
+    }
+
+    private function validateLesschrUrl ($url){
+        $matches = array ();
+        $isValid = preg_match('/http:\/\/lesschr.com\/(?<id>(.+))/i',$url,$matches);
+        if ($isValid){
+            $baseEncodedId = $matches['id'];
+            $id = base64_decode($baseEncodedId);
+            if (preg_match('/[0-9]+/',$id)){
+                return $id;
+            }
+            return 0;
+        }
+        return 0;
+
     }
 }

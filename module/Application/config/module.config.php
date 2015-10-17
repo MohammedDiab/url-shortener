@@ -115,6 +115,9 @@ return array(
         'configuration'=>array(
             'orm_default'=>array(
                 'generate_proxies'=>false,
+                'datetime_functions' => array(
+                    "date"=> "Application\Date"
+                )
             )
         )
     )

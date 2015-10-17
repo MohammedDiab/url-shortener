@@ -13,7 +13,7 @@ return array(
             'try' => array(
                 'type' => 'Zend\Mvc\Router\Http\Literal',
                 'options' => array(
-                    'route'    => '/try',
+                    'route'    => '/url/try',
                     'defaults' => array(
                         'module'=>'Shortener',
                         'controller' => 'Shortener\Controller\Index',
@@ -24,11 +24,44 @@ return array(
             'short' => array(
                 'type' => 'Zend\Mvc\Router\Http\Literal',
                 'options' => array(
-                    'route'    => '/short',
+                    'route'    => '/url/short',
                     'defaults' => array(
                         'module'=>'Shortener',
                         'controller' => 'Shortener\Controller\Index',
                         'action'     => 'short',
+                    ),
+                ),
+            ),
+            'track' => array(
+                'type' => 'Zend\Mvc\Router\Http\Literal',
+                'options' => array(
+                    'route'    => '/url/track',
+                    'defaults' => array(
+                        'module'=>'Shortener',
+                        'controller' => 'Shortener\Controller\Index',
+                        'action'     => 'track',
+                    ),
+                ),
+            ),
+            'graph' => array(
+                'type' => 'Zend\Mvc\Router\Http\Literal',
+                'options' => array(
+                    'route'    => '/url/track/graph',
+                    'defaults' => array(
+                        'module'=>'Shortener',
+                        'controller' => 'Shortener\Controller\Index',
+                        'action'     => 'trackGraph',
+                    ),
+                ),
+            ),
+            'redirect' => array(
+                'type' => 'Zend\Mvc\Router\Http\Segment',
+                'options' => array(
+                    'route'    => '/:baseEncodedUrl',
+                    'defaults' => array(
+                        'module'=>'Shortener',
+                        'controller' => 'Shortener\Controller\Index',
+                        'action'     => 'redirect',
                     ),
                 ),
             ),

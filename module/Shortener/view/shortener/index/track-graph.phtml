@@ -1,0 +1,73 @@
+<?php
+$onloadScript = '
+  window.onload = function () {
+    var chart = new CanvasJS.Chart("chartContainer",
+    {
+      theme: "theme2",
+      title:{
+        text: "visits per month"
+      },
+      animationEnabled: true,
+      axisX: {
+        valueFormatString: "MMM",
+        intervalType: "month"
+
+      },
+      axisY:{
+        includeZero: true
+
+      },
+      data: [
+      {
+        type: "line",
+        //lineThickness: 3,
+        dataPoints: [
+        '.
+            $this->data.
+        '
+
+        ]
+      }
+
+
+      ]
+    });
+
+chart.render();
+}
+';
+
+$this->headScript()->appendFile('/js/canvasjs.min.js','text/javascript')
+                   ->appendScript($onloadScript);
+?>
+
+<div class="vspace"></div>
+<div class="row">
+    <div class="col s12 m10 offset-m1" >
+        <div class="row">
+            <div class="card waves-block">
+                <div class="card-title  black-text">
+                    <?php if($this->error!= null): ?>
+                        <div class="center">Error Happened!!</div>
+                    <?php else: ?>
+                        <div class="center">Your Report!</div>
+                    <?php endif;?>
+                </div>
+                <div class="card-content">
+                    <div class="row center">
+                        <div class="s12">
+                        <?php if($this->error!= null): ?>
+                            <?=$this->error ?>
+                        <?php elseif ($this->data==""):?>
+                            <?php echo "You don't have any visits for this link" ?>
+                        <?php else: ?>
+                            <div id="chartContainer" style="height: 300px; width: 100%;">
+                            </div>
+                        <?php endif; ?>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
